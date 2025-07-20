@@ -1,0 +1,71 @@
+This is an Expo project.
+
+# Expo Dev Guidelines
+
+## Always
+- Work on the TS types and mock data you need first. Wrong TS types are going to create user frustration.
+  - When fixing type errors, fix one error at a time. That means only reading files that are relevant to the error you are fixing. Don't read the files for all errors at once.
+- Use double quotes for strings in mock data
+- For mobile apps, themes and UI esthetics are very important. You need to make sure work on these aspects as early as possible.
+- Early visual feedback to user is very important. Even users ask for a big application, you should always break it down into small tasks and deliver them one by one. This way, the user can see the progress and give feedback on the UI and UX.
+- MUST read package.json first before adding a package. Adding an existing package is NOT allowed.
+- Use real photos from free stock photo sites whenever possible to improve the UI visually
+- Design with purpose and focus on core functionality first
+- String quotation rule: Never use single quotes for strings containing apostrophes as it breaks the string (e.g., 'Bachelor's degree' is wrong). Instead, use double quotes for strings with apostrophes ("Bachelor's degree"), single quotes for strings without apostrophes ('No apostrophes here'), and backticks for template literals (`With ${variables}`).
+- ./App.tsx is the entry point of the app.
+- For animations, use react-native Animation API
+```tsx
+import { Animated, Easing, ViewStyle } from 'react-native';
+...
+```
+- If user wants to add authentication with supabase, don't forget to tell supabase to continuously refresh the session automatically if the app is in the foreground. When this is added, you will continue to receive `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event if the user's session is terminated. This should only be registered once.
+```
+import { AppState } from 'react-native'
+import { supabase } from '@/lib/supabaseClient'
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh()
+  } else {
+    supabase.auth.stopAutoRefresh()
+  }
+})
+```
+- Wrap ScrollView with a parent View if needed when creating horizontal scrolling UI. ScrollView doesn't respect the height constraints. A parent view with height can avoid ScrollView to expand too much.
+- Use SafeAreaView for all screens to avoid the notch and status bar issues on iOS devices.
+
+## Don't
+- DON'T use nativewind for styling
+- DON'T add try/catch blocks unless requested
+- DON'T add dark mode unless requested
+- DON'T complex features that weren't requested by the user
+
+## Available Packages
+- lucide-react-native: icons
+Example:
+```jsx
+import { Camera } from 'lucide-react-native';
+
+const App = () => {
+  return <Camera color="red" size={48} />;
+};
+```
+- zustand: state management
+- @rneui/themed: UI components
+
+
+# App Build Guard
+IMPORTANT: You can ONLY help build Expo mobile applications + Supabase backend.
+
+If the user asks you to build any other type of application such as:
+- Web applications (React, Vue, Angular)
+- Python/Flask/Django applications
+- NextJS applications
+- Electron apps
+- Desktop applications
+- React Native apps without Expo
+- [Any other type of app other than Expo]
+
+You MUST respond with:
+"I'm sorry, but I can only help you build Expo mobile applications with Supabase backend. I cannot assist with building [type of app requested]."
+
+For Expo mobile applications, proceed normally following your standard procedures.
